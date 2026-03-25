@@ -75,35 +75,49 @@ El frontend consume la API mediante servicios HTTP utilizando Angular (`HttpClie
 
 ---
 
-## 🚀 Ejecución del Proyecto
+## 🗄️ Base de Datos
 
-### 📦 Backend
+Se utilizó MariaDB.
 
-```bash
-cd NeosoftApi
+### Crear base de datos:
+```sql
+CREATE DATABASE neosoft;
+Configurar conexión:
+
+Editar el archivo appsettings.json del backend:
+
+"ConnectionStrings": {
+  "DefaultConnection": "server=localhost;database=neosoft;user=root;password=tu_password;"
+}
+
+Las tablas se crean automáticamente al ejecutar la API.
+
+🚀 Ejecución del Proyecto
+📦 Backend
+cd NeosoftApi/NeosoftApi
 dotnet run
 
 🔗 API disponible en:
-
 http://localhost:5263
+
 🌐 Frontend
-cd Neosoft-frontend
+cd neosoft-frontend
 npm install
 npm start
 
 🔗 Aplicación disponible en:
-
 http://localhost:4200
+
 📁 Estructura del Proyecto
 Neosoft/
 ├── NeosoftApi/        # Backend (.NET Core)
-├── Neosoft-frontend/  # Frontend (Angular)
+├── neosoft-frontend/  # Frontend (Angular)
 └── README.md
 💡 Decisiones Técnicas
 Separación de capas (frontend/backend)
 Uso de Entity Framework para acceso a datos
 Arquitectura basada en servicios en Angular
-Componentización para cada entidad (Usuarios, Roles, Variables)
+Componentización por entidad (Usuarios, Roles, Variables)
 📈 Posibles Mejoras
 Implementar autenticación (JWT)
 Paginación en tablas
