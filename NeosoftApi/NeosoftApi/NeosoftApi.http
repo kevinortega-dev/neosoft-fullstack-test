@@ -1,0 +1,6 @@
+@NeosoftApi_HostAddress = http://localhost:5263
+
+GET {{NeosoftApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

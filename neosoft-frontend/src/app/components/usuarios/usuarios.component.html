@@ -1,0 +1,62 @@
+<div class="pagina">
+  <div class="encabezado">
+    <h2>Mantenedor de Usuarios</h2>
+    <button class="btn-primary" (click)="abrirFormularioNuevo()">+ Nuevo Usuario</button>
+  </div>
+
+  <div class="alerta error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  <div class="alerta success" *ngIf="successMsg">{{ successMsg }}</div>
+
+  <!-- formulario -->
+  <div class="formulario" *ngIf="mostrarFormulario">
+    <h3>{{ editando ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+    <div class="campo">
+      <label>Nombre</label>
+      <input type="text" [(ngModel)]="usuarioForm.nombre" placeholder="Ingrese el nombre" />
+    </div>
+    <div class="campo">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="usuarioForm.email" placeholder="Ingrese el email" />
+    </div>
+    <div class="campo">
+      <label>Rol</label>
+      <select [(ngModel)]="usuarioForm.rolId">
+        <option [value]="0" disabled>Seleccione un rol</option>
+        <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.nombre }}</option>
+      </select>
+    </div>
+    <div class="botones">
+      <button class="btn-primary" (click)="guardarUsuario()">Guardar</button>
+      <button class="btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- tabla -->
+  <div *ngIf="cargando">Cargando...</div>
+
+  <table *ngIf="!cargando && usuarios.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <td>{{ usuario.id }}</td>
+        <td>{{ usuario.nombre }}</td>
+        <td>{{ usuario.email }}</td>
+        <td>{{ usuario.nombreRol }}</td>
+        <td>
+          <button class="btn-edit" (click)="editarUsuario(usuario)">Editar</button>
+          <button class="btn-delete" (click)="eliminarUsuario(usuario.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!cargando && usuarios.length === 0">No hay usuarios registrados.</p>
+</div>

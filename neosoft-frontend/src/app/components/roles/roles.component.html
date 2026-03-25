@@ -1,0 +1,47 @@
+<div class="pagina">
+  <div class="encabezado">
+    <h2>Mantenedor de Roles</h2>
+    <button class="btn-primary" (click)="abrirFormularioNuevo()">+ Nuevo Rol</button>
+  </div>
+
+  <div class="alerta error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  <div class="alerta success" *ngIf="successMsg">{{ successMsg }}</div>
+
+  <!-- formulario -->
+  <div class="formulario" *ngIf="mostrarFormulario">
+    <h3>{{ editando ? 'Editar Rol' : 'Nuevo Rol' }}</h3>
+    <div class="campo">
+      <label>Nombre</label>
+      <input type="text" [(ngModel)]="rolForm.nombre" placeholder="Ingrese el nombre del rol" />
+    </div>
+    <div class="botones">
+      <button class="btn-primary" (click)="guardarRol()">Guardar</button>
+      <button class="btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- tabla -->
+  <div *ngIf="cargando">Cargando...</div>
+
+  <table *ngIf="!cargando && roles.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rol of roles">
+        <td>{{ rol.id }}</td>
+        <td>{{ rol.nombre }}</td>
+        <td>
+          <button class="btn-edit" (click)="editarRol(rol)">Editar</button>
+          <button class="btn-delete" (click)="eliminarRol(rol.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!cargando && roles.length === 0">No hay roles registrados.</p>
+</div>

@@ -1,0 +1,62 @@
+<div class="pagina">
+  <div class="encabezado">
+    <h2>Mantenedor de Variables</h2>
+    <button class="btn-primary" (click)="abrirFormularioNuevo()">+ Nueva Variable</button>
+  </div>
+
+  <div class="alerta error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  <div class="alerta success" *ngIf="successMsg">{{ successMsg }}</div>
+
+  <!-- formulario -->
+  <div class="formulario" *ngIf="mostrarFormulario">
+    <h3>{{ editando ? 'Editar Variable' : 'Nueva Variable' }}</h3>
+    <div class="campo">
+      <label>Nombre</label>
+      <input type="text" [(ngModel)]="variableForm.nombre" placeholder="Ingrese el nombre" />
+    </div>
+    <div class="campo">
+      <label>Valor</label>
+      <input type="text" [(ngModel)]="variableForm.valor" placeholder="Ingrese el valor" />
+    </div>
+    <div class="campo">
+      <label>Tipo</label>
+      <select [(ngModel)]="variableForm.tipo">
+        <option value="" disabled>Seleccione un tipo</option>
+        <option *ngFor="let tipo of tiposDisponibles" [value]="tipo">{{ tipo }}</option>
+      </select>
+    </div>
+    <div class="botones">
+      <button class="btn-primary" (click)="guardarVariable()">Guardar</button>
+      <button class="btn-secondary" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- tabla -->
+  <div *ngIf="cargando">Cargando...</div>
+
+  <table *ngIf="!cargando && variables.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Valor</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let variable of variables">
+        <td>{{ variable.id }}</td>
+        <td>{{ variable.nombre }}</td>
+        <td>{{ variable.valor }}</td>
+        <td>{{ variable.tipo }}</td>
+        <td>
+          <button class="btn-edit" (click)="editarVariable(variable)">Editar</button>
+          <button class="btn-delete" (click)="eliminarVariable(variable.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!cargando && variables.length === 0">No hay variables registradas.</p>
+</div>
