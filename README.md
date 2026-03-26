@@ -1,129 +1,166 @@
-# 🧩 Neosoft Admin - Prueba Técnica Full Stack
+# Neosoft Admin - Prueba Técnica Full Stack
 
-## 📌 Descripción General
+## Descripción
 
-Aplicación web Full Stack desarrollada como solución a prueba técnica, orientada a la gestión administrativa de entidades clave:
+Aplicación web Full Stack desarrollada como solución a prueba técnica, orientada a la gestión administrativa de:
 
-- 👤 Usuarios
-- 🛡️ Roles
-- ⚙️ Variables del sistema
+- Usuarios
+- Roles
+- Variables del sistema
 
-El sistema permite realizar operaciones CRUD completas, integrando frontend y backend mediante API REST.
-
----
-
-## 🏗️ Arquitectura
-
-El proyecto está dividido en dos aplicaciones independientes:
-
-- **Backend:** API REST en .NET Core
-- **Frontend:** SPA en Angular
+El sistema permite realizar operaciones CRUD completas (Crear, Leer, Editar, Eliminar), integrando frontend y backend mediante una API REST.
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
-### 🔙 Backend
-- .NET Core Web API
+### Backend
+- .NET 9 Web API
 - Entity Framework Core
+- Pomelo.EntityFrameworkCore.MySql
 - MariaDB
-- LINQ
 
-### 🔜 Frontend
-- Angular
+### Frontend
+- Angular 18
 - TypeScript
-- HTML5
-- CSS3
 - RxJS
+- HttpClient
 
 ---
 
-## ⚙️ Funcionalidades Implementadas
+## Estructura del Proyecto
+```
+Neosoft.Prueba_Kevin/
+├── NeosoftApi/
+│   └── NeosoftApi/        ← proyecto backend (entrar a esta carpeta para ejecutar)
+├── neosoft-frontend/      ← proyecto frontend
+└── README.md
+```
 
-### 🔹 Usuarios
-- Crear usuario
-- Listar usuarios
-- Editar usuario
-- Eliminar usuario
-- Asociación con roles
-
-### 🔹 Roles
-- Crear rol
-- Listar roles
-- Editar rol
-- Eliminar rol
-
-### 🔹 Variables
-- Crear variable
-- Listar variables
-- Editar variable
-- Eliminar variable
+> **Nota:** La carpeta del backend tiene dos niveles con el mismo nombre (`NeosoftApi/NeosoftApi`). Esto es normal, hay que entrar a la carpeta interior para ejecutar el proyecto.
 
 ---
 
-## 🔐 Validaciones
+## Requisitos Previos
 
-- Campos obligatorios en formularios
-- Manejo de errores en frontend y backend
-- Confirmación antes de eliminación de registros
-
----
-
-## 🔄 Comunicación
-
-El frontend consume la API mediante servicios HTTP utilizando Angular (`HttpClient`), manejando estados de carga, éxito y error.
+- .NET 9 SDK
+- Node.js y npm
+- Angular CLI 18
+- MariaDB instalado y corriendo en puerto 3306
 
 ---
 
-## 🗄️ Base de Datos
+## Paso 1 - Configurar la Base de Datos
 
-Se utilizó MariaDB.
-
-### Crear base de datos:
+Conectarse a MariaDB y ejecutar el siguiente script completo:
 ```sql
-CREATE DATABASE neosoft;
-Configurar conexión:
+CREATE DATABASE neosoft_db CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-Editar el archivo appsettings.json del backend:
+USE neosoft_db;
 
-"ConnectionStrings": {
-  "DefaultConnection": "server=localhost;database=neosoft;user=root;password=tu_password;"
+CREATE TABLE Roles (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Usuarios (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(150) NOT NULL,
+    Email VARCHAR(200) NOT NULL UNIQUE,
+    RolId INT NOT NULL,
+    FOREIGN KEY (RolId) REFERENCES Roles(Id)
+);
+
+CREATE TABLE Variables (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(150) NOT NULL,
+    Valor VARCHAR(500) NOT NULL,
+    Tipo ENUM('texto', 'numérico', 'booleano') NOT NULL
+);
+
+INSERT INTO Roles (Nombre) VALUES ('Administrador'), ('Usuario'), ('Supervisor');
+```
+
+---
+
+## Paso 2 - Configurar la Conexión
+
+Abrir el archivo `NeosoftApi/NeosoftApi/appsettings.json` y ajustar la contraseña si es necesario:
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Port=3306;Database=neosoft_db;User=root;Password=Admin1234;"
+  }
 }
+```
 
-Las tablas se crean automáticamente al ejecutar la API.
+---
 
-🚀 Ejecución del Proyecto
-📦 Backend
+## Paso 3 - Ejecutar el Backend
+
+Abrir una terminal y ejecutar:
+```bash
 cd NeosoftApi/NeosoftApi
 dotnet run
+```
 
-🔗 API disponible en:
-http://localhost:5263
+La API quedará disponible en: `http://localhost:5263`
 
-🌐 Frontend
+### Endpoints disponibles
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | /api/roles | Listar roles |
+| POST | /api/roles | Crear rol |
+| PUT | /api/roles/{id} | Editar rol |
+| DELETE | /api/roles/{id} | Eliminar rol |
+| GET | /api/usuarios | Listar usuarios |
+| POST | /api/usuarios | Crear usuario |
+| PUT | /api/usuarios/{id} | Editar usuario |
+| DELETE | /api/usuarios/{id} | Eliminar usuario |
+| GET | /api/variables | Listar variables |
+| POST | /api/variables | Crear variable |
+| PUT | /api/variables/{id} | Editar variable |
+| DELETE | /api/variables/{id} | Eliminar variable |
+
+---
+
+## Paso 4 - Ejecutar el Frontend
+
+Abrir otra terminal y ejecutar:
+```bash
 cd neosoft-frontend
 npm install
-npm start
+npx ng serve
+```
 
-🔗 Aplicación disponible en:
-http://localhost:4200
+La aplicación quedará disponible en: `http://localhost:4200`
 
-📁 Estructura del Proyecto
-Neosoft/
-├── NeosoftApi/        # Backend (.NET Core)
-├── neosoft-frontend/  # Frontend (Angular)
-└── README.md
-💡 Decisiones Técnicas
-Separación de capas (frontend/backend)
-Uso de Entity Framework para acceso a datos
-Arquitectura basada en servicios en Angular
-Componentización por entidad (Usuarios, Roles, Variables)
-📈 Posibles Mejoras
-Implementar autenticación (JWT)
-Paginación en tablas
-Validaciones más robustas (Forms reactivos)
-UI con framework (Angular Material / Bootstrap)
-👨‍💻 Autor
+---
 
-Kevin Ortega
+## Funcionalidades
+
+### Usuarios
+- Listar, crear, editar y eliminar usuarios
+- El campo Rol se carga dinámicamente desde la API
+- Validación de email y campos obligatorios
+- Confirmación antes de eliminar
+
+### Roles
+- Listar, crear, editar y eliminar roles
+- Validación de campos obligatorios
+- No permite eliminar un rol que tenga usuarios asignados
+- Confirmación antes de eliminar
+
+### Variables
+- Listar, crear, editar y eliminar variables
+- El tipo se selecciona desde un dropdown (texto, numérico, booleano)
+- Validación de campos obligatorios
+- Confirmación antes de eliminar
+
+---
+
+## Autor
+
+Kevin Ortega  
 Ingeniero en Informática
